@@ -4,7 +4,7 @@
 
 ### Waarom eisen vóóraf worden gesteld
 
-Een BIM-model is zelden vanzelf geschikt voor hergebruik in een geografisch informatiesysteem. Een model dat prima voldoet voor ontwerp, calculatie of uitvoering, kan tegelijkertijd onbruikbaar zijn voor conversie naar GEO: de georeferentie ontbreekt, objecten zijn gemodelleerd als generieke bouwdelen zonder typering, of de geometrie is weliswaar visueel correct maar niet gesloten. Zulke tekortkomingen zijn achteraf niet of alleen tegen hoge kosten te herstellen, omdat de informatie die nodig is voor de conversie op dat moment eenvoudigweg nooit is vastgelegd.
+Een BIM-model is zelden vanzelf geschikt voor hergebruik in een geografisch informatiesysteem. Een model dat prima voldoet voor ontwerp, calculatie of uitvoering, kan tegelijkertijd onbruikbaar zijn voor conversie naar GEO: de georeferentie ontbreekt (IfcMapconversion), eenheden (Units) zijn niet helder,  objecten (Entiteiten: IfcWall, IfcSpaces, IfcSensor) zijn gemodelleerd als generieke bouwdelen zonder typering (Attributen: ObjectType, Name), of de geometrie is weliswaar visueel correct maar niet gesloten (Geometrie). Zulke tekortkomingen zijn achteraf niet of alleen tegen hoge kosten te herstellen, omdat de informatie die nodig is voor de conversie op dat moment eenvoudigweg nooit is vastgelegd.
 
 Een succesvolle transformatie van BIM naar een GIS-formaat begint daarom vóór het modelleerwerk, met expliciete afspraken over wat er geleverd wordt, in welke vorm en met welke kwaliteit. Die afspraken zijn geen administratieve last: ze zijn de enige manier om automatische conversie betrouwbaar en herhaalbaar te maken. Zonder kaders blijft elke conversie handwerk, en daarmee een eenmalige exercitie in plaats van een reproduceerbaar proces.
 
@@ -18,12 +18,13 @@ De norm kent daarvoor een cascade van informatiebehoeften. Elke eis in een ILS i
 
 | Behoefte/Eis | Voorbeeld |
 |--------------|-----------|
-| Organizational Information Requirement (OIR) | "Wij willen vastgoed beheren en daarom hebben wij informatie nodig." |
-| Asset Information Requirements (AIR) | "Voor vastgoedbeheer hebben wij de gegevens nodig van materiaal, onderhoud, levensduur, constructie en gebruik." |
-| Asset Information Model (AIM) | "In het assetbeheersysteem kennen wij het object 'Gebouw' met de attributen 'materiaal', 'levensduur', 'constructie' en 'gebruik', en de activiteit 'onderhoud' die een koppeling krijgt naar een gebouw." |
-| Project Information Requirements (PIR) | "Voor de renovatie van dit vastgoedproject hebben wij informatie nodig om het ontwerp, de realisatie en de toekomstige overdracht naar beheer mogelijk te maken." |
-| Exchange Information Requirements (EIR) | "Deze bestaande asset- en projectinformatie moet door deze betrokken partijen op afgesproken momenten en in afgesproken formats worden geleverd." |
-| Project Information Model (PIM) | "Tijdens het project wordt deze informatie vastgelegd in het Project Information Model; materiaal, levensduur en constructie worden na oplevering doorgegeven aan het Asset Information Model." |
+| Organizational Information Requirement (OIR) | "Wij willen vastgoed beheren en daarom hebben wij informatie nodig." "Wij willen vergunningen beoordelen op Omgevingsplan of Technische activiteit en daarom hebben wij informatie nodig." |
+| Asset Information Requirements (AIR) | "Voor vastgoedbeheer hebben wij de gegevens nodig van gebruiksfuncties, materiaal, onderhoud, levensduur, constructie en gebruik." |
+| Asset Information Model (AIM) | "In het assetbeheersysteem kennen wij het object 'Ruimte', 'Geleiderrail', 'Airco-unit', 'Buitengevel' of 'Dakafwerking' met de attributen 'materiaal', 'levensduur', 'constructie' en 'gebruik', en de activiteit 'onderhoud' die een koppeling krijgt naar een gebouw." |
+| Project Information Requirements (PIR) | "Voor de renovatie van dit bouwwerk hebben wij informatie nodig om het ontwerp, de realisatie en de toekomstige overdracht naar beheer mogelijk te maken." |
+| Exchange Information Requirements (EIR) | "Deze asset- en projectinformatie moet door deze betrokken partijen op afgesproken momenten en in afgesproken formats worden geleverd." |
+| Project Information Model (PIM) | "Tijdens het project wordt deze informatie vastgelegd in het Project Information Model (een set met allerlei verschillende bestanden, databases etc. "Informatie containers" volgens de norm"; materiaal, levensduur en constructie worden na oplevering doorgegeven aan het Asset Information Model." |
+| IFC model (BIM) | "Onderdeel van de uitwisseling op projecten kan gestructureerde data worden doorgegeven via IFC bestanden die vaak in IFC-Step files worden uitgewisseld tussen voornamelijk teken en modelleer systemen gecombineerd met de geometrie van bouwwerken" |
 
   <figure id="ISO-19650-dataproducten-en-relaties" style="display: block; text-align: center; margin: 0 auto;">
           <img src="media/06_eisen/ISO_19650_Datasets.png" alt="ISO 19650 dataproducten en relaties" style="width: 100%; max-width: 800px; height: auto; display: block; margin: 0 auto;"/>
@@ -35,21 +36,25 @@ De norm kent daarvoor een cascade van informatiebehoeften. Elke eis in een ILS i
           </figcaption>
     </figure>
 
-Een ILS is in deze termen de Nederlandse invulling van een EIR. <mark>Redactie: de herziening van ISO 19650 (DIS 2026) vervangt de term EIR door IPR en gaat van een 8- naar een 9-stapsproces. Overweeg een korte transitieparagraaf, zodat deze praktijkrichtlijn bij publicatie niet direct verouderde terminologie hanteert.</mark>
+
+Een ILS is in deze termen de Nederlandse invulling van een EIR. 
+
+<mark>Redactie: de herziening van ISO 19650 (DIS 2026) vervangt de term EIR door IPR en gaat van een 8- naar een 9-stapsproces. Overweeg een korte transitieparagraaf, zodat deze praktijkrichtlijn bij publicatie niet direct verouderde terminologie hanteert.</mark>
 
 ### Generieke eisen aan het BIM-model voor conversie naar GEO
 
-Onderstaande onderwerpen komen in vrijwel elke BIM-naar-GEO-toepassing terug. Ze zijn geordend van drager (bestand) naar inhoud (geometrie en semantiek). Welke van deze eisen daadwerkelijk gelden en hoe streng, hangt af van het GEO-product dat gemaakt moet worden; die koppeling wordt gelegd in *Van BIM-eis naar GEO-product*.
+Onderstaande onderwerpen komen in vrijwel elke BIM-naar-GEO-toepassing terug. Ze zijn geordend van drager (bestand / information container) naar inhoud (geometrie en semantiek). Welke van deze eisen daadwerkelijk gelden en hoe streng, hangt af van het GEO-product dat gemaakt moet worden; die koppeling wordt gelegd in *Van BIM-eis naar GEO-product*.
 
 #### 1. Bestandsformaat en schema
 
 Leg vast in welk schema geleverd wordt. IFC4 en IFC4X3_ADD2 (gepubliceerd als ISO 16739-1:2024) zijn de schema's waarop de huidige generatie IDS- en conversiesoftware is gebouwd; IFC2X3 wordt door veel gereedschap nog ondersteund, maar mist `IfcMapConversion` en `IfcProjectedCRS` en is daarmee ongeschikt voor een sluitende georeferentie. Waar bestaande software nog IFC2X3 oplevert, is dat een reden om de leveringsafspraak op de exportinstellingen te richten en niet op het beschikbare bestand.
 
-> **Eis** — Het model wordt geleverd als IFC volgens schema IFC4 of IFC4X3_ADD2. Het gebruikte schema wordt in de leveringsafspraak benoemd; het bestand is schemavalide.
+> **Eis** — De modellen worden geleverd als IFC-STEP bestanden volgens schema IFC4 of IFC4X3_ADD2. Het gebruikte schema en format wordt in de leveringsafspraak benoemd; het bestand is schemavalide.
+
 
 #### 2. Bestandsnaamgeving en informatiecontainers
 
-Bestandsnaamconventies beschrijven afspraken voor het eenduidig identificeren en beheren van informatiebestanden. De bestandsnaam bevat alleen de metadata die nodig is voor beheer en uitwisseling — projectcode, discipline, status, versie — en is niet bedoeld om inhoudelijke informatie over objecten of eigenschappen vast te leggen. Die informatie hoort in het model of de dataset zelf. ISO 19650-4 biedt hiervoor een uitgewerkte conventie.
+Bestandsnaamconventies beschrijven afspraken voor het eenduidig identificeren en beheren van informatiebestanden. De bestandsnaam bevat alleen de metadata die nodig is voor beheer en uitwisseling. De aanbeveling is om in de Pset_ProjectInformation gegevens te zetten over Projectcode, discipline, status, versie — en is niet bedoeld om al deze inhoudelijke informatie in de bestandsnaam op te nemen. . Die informatie hoort in het model of de dataset zelf. ISO 19650-4 biedt hiervoor een uitgewerkte conventie.
 
 #### 3. Eenheden en maatvoering
 
